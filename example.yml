@@ -1,0 +1,9 @@
+protocol:
+  name: "My cool protocol"
+  header:
+    opcode:
+      type: "u32"
+    data_length:
+      type: "u32"
+
+    
