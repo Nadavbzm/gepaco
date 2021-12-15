@@ -17,12 +17,8 @@ setup(
     license = "BSD",
     url = "https://github.com/Koren13n/GPC",
     long_description=read(),
+    include_package_data=True,
     entry_points = {
         'console_scripts': ['gpc=gpc.__main__:main'],
     },
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Topic :: Utilities",
-        "License :: OSI Approved :: BSD License",
-    ],
 )
