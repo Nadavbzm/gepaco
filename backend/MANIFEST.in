@@ -1,1 +1,1 @@
-include ../frontend/build/web
+recursive-include gpc/static *
