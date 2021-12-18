@@ -1,6 +1,5 @@
 build-all:
 	cd frontend && flutter build web
-	pwd
-	rm -rf backend/GPC/static/*
-	cp -r frontend/build/web/* backend/GPC/static
+	rm -rf backend/gepaco/static/*
+	cp -r frontend/build/web/* backend/gepaco/static
 	cd backend && python setup.py bdist_wheel
