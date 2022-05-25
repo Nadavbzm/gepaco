@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "connection_type": { "type": "string" },
+    "connection_info": { "type": "object" },
+    "packet_data": { "$ref": "file:schemas/packet_schema.json" }
+  },
+  "required": ["connection_type", "packet_data"]
+}

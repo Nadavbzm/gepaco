@@ -1,0 +1,8 @@
+{
+    "type": "object",
+    "properties": 
+    {
+        "header": {"type": "number"},
+        "data": {"type": "number"}
+    }
+}
