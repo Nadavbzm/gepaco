@@ -9,21 +9,19 @@ def read():
     return open("../README.md").read()
 
 setuptools.setup(
-    name = "gpc",
+    name = "gepaco",
     version = "0.0.1",
     author = "Koren Minchev",
     author_email = "korenminchev@gmail.com",
     description = ("Generic Packet Communicator"),
     license = "BSD",
-    url = "https://github.com/Koren13n/GPC",
+    url = "https://github.com/Koren13n/gepaco",
     packages=setuptools.find_packages(),
+    install_requires=["uvicorn", "fastapi"],
     long_description=read(),
-    package_dir={'gpc':'gpc'},
+    package_dir={'gepaco':'gepaco'},
     include_package_data=True,
-    # package_data = {
-    #     'static': ['gpc/static/*'],
-    # },
     entry_points = {
-        'console_scripts': ['gpc=gpc.__main__:main'],
+        'console_scripts': ['gepaco=gepaco.__main__:main'],
     },
 )
