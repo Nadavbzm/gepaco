@@ -1,5 +1,6 @@
 from importlib.machinery import SourceFileLoader
 from hydration import scalars, helpers, Struct
+from struct_handling import load_structs_from_path
 
 hydration_scalar_to_str = {
     scalars.UInt8: "uint8",
@@ -21,17 +22,17 @@ class HydrationStructsParser():
         icd = SourceFileLoader("icd", self.structs_file).load_module()
         messages_dict = {}
         messages_dict["messages"] = []
-        for struct in icd.message_to_opcode.keys():
-            struct_name = struct.__name__
-            struct_field_names = icd.__dict__[struct_name].__dict__["_field_names"]
-            struct_fields = icd.__dict__[struct_name].__dict__
+        for struct_name, struct in load_structs_from_path(self.structs_file).items():
+            struct_field_names = struct.__dict__["_field_names"]
+            struct_fields = struct.__dict__
             struct_json = {
+                
                 "name": struct_name,
             }
             struct_json["fields"] = self._generate_struct_fields(struct)
             messages_dict["messages"].append(struct_json)
-
-        return messages_dict
+            
+        return messages_dict    
 
     def _generate_struct_fields(self, struct):
         assert isinstance(helpers.as_obj(struct), Struct)
