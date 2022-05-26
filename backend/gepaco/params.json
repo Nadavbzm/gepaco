@@ -1,10 +1,4 @@
 {
-    "connection_type": "UDP",
-    "connection_info": 
-    {
-        "ip" : "127.0.0.1",
-        "port" : "8080"
-    },
     "packet_data": 
     {
         "header": 3, 

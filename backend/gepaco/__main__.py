@@ -1,4 +1,4 @@
-from .server import run
+from .main import run
 
 def main():
     run()
