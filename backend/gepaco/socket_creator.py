@@ -10,4 +10,4 @@ def create_udp_socket():
 
 def create_socket(connection_type, ip, port):
     if connection_type == UDP_CONNECTION:
-        return create_udp_socket()
+        return create_udp_socket(), True

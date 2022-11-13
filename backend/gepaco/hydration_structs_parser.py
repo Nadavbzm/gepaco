@@ -31,7 +31,7 @@ class HydrationStructsParser():
             }
             struct_json["fields"] = self._generate_struct_fields(struct)
             messages_dict["messages"].append(struct_json)
-            
+
         return messages_dict    
 
     def _generate_struct_fields(self, struct):

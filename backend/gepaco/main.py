@@ -1,4 +1,3 @@
-import argparse
 from fileinput import filename
 from struct import pack
 from protocol_parser import ProtocolParser
@@ -7,24 +6,16 @@ from yaml.scanner import ScannerError
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from ast import If
 import os
 from pickletools import uint8
-from unittest import case
 from hydration import *
 import json
 from socket_creator import *
 from structs import * 
-from pydantic import BaseModel
 from struct_handling import load_structs_from_path
 from hydration_structs_parser import HydrationStructsParser
 
-SCHEMAS_DIR_PATH = "schemas/"
-FRONT_END_SCHEMA_FILE_NAME="send_packet_request_schema.json"
-SUPPORTED_FILE_EXTENTIONS = [".json"]
-
-PACKET_SCHEMA_PREFIX = "packet_schema_"
-packet_schemas = {}
+packets_json = {}
 
 known_structs = {}
 structs_initialized = False
@@ -32,50 +23,41 @@ socket_initialized = False
 
 sock = None
 
-def is_valid_file(parser, arg):
-    filename, file_extension = os.path.splitext(arg)
-    if not os.path.exists(arg):
-        parser.error("The file %s does not exist" % arg)
-    if file_extension not in SUPPORTED_FILE_EXTENTIONS:
-        print(file_extension)
-        parser.error("The file %s is not in supported type" % arg)
-    else:
-        return open(arg, 'r')  # return an open file handle
-
-def generate_json_schemas_from_structs(structs_filename : str):
-    global packet_schemas
-    hydration_parser = HydrationStructsParser(structs_filename)
-    packet_schemas = hydration_parser.run()
-
-    print(packet_schemas)
-    pass
+app = FastAPI()
 
 current_directory = os.path.dirname(__file__)
 frontend_directory = os.path.join(current_directory, 'static')
 
-app = FastAPI()
-
 app.mount("/app", StaticFiles(directory=frontend_directory, html = True), name="static")
+
+def generate_json_schemas_from_structs(structs_filename : str):
+    global packets_json
+    hydration_parser = HydrationStructsParser(structs_filename)
+    packets_json = hydration_parser.run()
+
 
 @app.post("/connect/")
 async def conenct(connection_type: str, ip: str, port : int):
     global sock
     global socket_initialized
-    sock = create_socket(connection_type, ip, port)
-    socket_initialized = True
-    pass
+    sock, succuss = create_socket(connection_type, ip, port)
+    if succuss:
+        socket_initialized = True
+        return "Successfully created connection"
+    
+    return "Failed to create socket with given parameters"
 
 @app.get("/structs/")
 def get_structs():
-    global packet_schemas
-    return packet_schemas
+    global packets_json
+    return packets_json
 
 @app.post("/packet/{packet_id}")
 async def packet(packet_id: str, packet_request : str):
     global structs_initialized
     global socket_initialized
     global sock
-    global packet_schemas
+    global packets_json
 
     if not structs_initialized:
         return "Send a struct firsrt :("
